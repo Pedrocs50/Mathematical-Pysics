@@ -14,7 +14,7 @@ OUT.mkdir(exist_ok=True)
 
 import matplotlib
 
-if __name__ == "__main__":
+if "get_ipython" not in globals():  # como script; no notebook as figuras aparecem na célula
     matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
@@ -29,6 +29,39 @@ from cap422.variational import action, euler_lagrange, euler_lagrange_with_rayle
 # Massa m presa por uma haste rígida sem massa de comprimento ℓ, em um campo gravitacional g.
 # A única coordenada generalizada é o ângulo θ(t) medido a partir da vertical (θ = 0 é a
 # posição mais baixa). A massa está sobre um arco de raio ℓ, então a velocidade é v = ℓ θ'.
+# A altura em relação ao ponto mais baixo é h = ℓ (1 − cos θ).
+
+# %%
+th_d = np.radians(35)  # ângulo usado só no desenho; comprimento desenhado = 1
+px, py = np.sin(th_d), -np.cos(th_d)
+fig, ax = plt.subplots(figsize=(5.4, 4.4))
+ax.plot([-0.45, 0.45], [0, 0], color="k", lw=2)  # suporte
+for xh in np.linspace(-0.43, 0.39, 10):
+    ax.plot([xh, xh + 0.05], [0, 0.06], color="k", lw=0.8)
+ax.plot([0, 0], [0, -1.15], "--", color="gray", lw=1)  # vertical
+arco = np.linspace(-th_d, th_d, 100)  # caminho da massa
+ax.plot(np.sin(arco), -np.cos(arco), ":", color="gray")
+ax.plot([0, px], [0, py], color="C0", lw=2.5)  # haste
+ax.scatter([0], [0], color="k", zorder=3)
+ax.scatter([px], [py], s=320, color="C1", zorder=3)
+ang = np.linspace(0, th_d, 50)
+ax.plot(0.35 * np.sin(ang), -0.35 * np.cos(ang), color="C3", lw=1.5)
+centro = dict(ha="center", va="center", fontsize=13)
+ax.text(0.49 * np.sin(th_d / 2), -0.49 * np.cos(th_d / 2), "θ(t)", color="C3", **centro)
+ax.text(px / 2 + 0.08, py / 2 + 0.04, "ℓ", **centro)
+ax.text(px, py + 0.14, "m", **centro)
+ax.annotate("", xy=(1.05, -0.5), xytext=(1.05, -0.1), arrowprops=dict(arrowstyle="->", lw=1.8))
+ax.text(1.13, -0.3, "g", **centro)
+ax.plot([-0.25, 1.0], [-1, -1], color="gray", lw=0.8)  # nível de referência do potencial
+ax.text(-0.43, -1.0, "V = 0", **centro)
+ax.plot([px, 0.95], [py, py], color="gray", lw=0.8, ls=":")
+ax.annotate("", xy=(0.9, py), xytext=(0.9, -1), arrowprops=dict(arrowstyle="<->", lw=1.2, shrinkA=0, shrinkB=0))
+ax.text(0.96, (py - 1) / 2, "h = ℓ (1 − cos θ)", ha="left", va="center", fontsize=11)
+ax.set(xlim=(-0.65, 1.6), ylim=(-1.2, 0.15), title="Pêndulo simples")
+ax.set_aspect("equal")
+ax.axis("off")
+fig.tight_layout()
+fig.savefig(OUT / "h3_desenho.png", dpi=150)
 
 # %% [markdown]
 # ## 3.2 T, V, L e a ação
@@ -111,8 +144,10 @@ for ang, Tn, Tex, err, dmax, drift in linhas:
 # - O período medido bate com o período exato (integral elíptica K) até a 5ª casa decimal: a simulação está correta.
 # - Em 5° a diferença entre as trajetórias é minúscula e o erro do período fica em torno de 0.05%.
 # - Em 30° o linearizado já adianta visivelmente em poucos ciclos (o período real é ~1.7% maior que T0).
-# - Em 90° a aproximação falha: o período real é ~15% maior que T0, e a trajetória linearizada
+# - Em 90° a aproximação falha: o período real é ~18% maior que T0, e a trajetória linearizada
 #   fica totalmente fora de fase depois de poucos ciclos.
+# - Cuidado com a referência da porcentagem: a coluna "erro T0 vs T" é (T0 − T)/T. Em 90° ela dá −15.3%,
+#   ou seja, T0 fica 15.3% abaixo do período real, o que equivale a T ser 18.0% maior que T0.
 # - A energia mecânica do pêndulo ideal não linear se conserva até o erro numérico (~1e-10).
 
 # %%

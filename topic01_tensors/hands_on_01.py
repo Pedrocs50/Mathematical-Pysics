@@ -1,9 +1,17 @@
 # %% [markdown]
 # # Hands-On 1: Tensor de condutividade 2D (CAP-422)
 # Rode célula por célula no VS Code (botão "Run Cell" acima de cada `# %%`)
-# ou tudo de uma vez: `python hands_on_01.py`.
+# ou tudo de uma vez: `python topic01_tensors/hands_on_01.py`.
 
 # %%
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1] if "__file__" in globals() else Path.cwd().parent
+sys.path.insert(0, str(ROOT))
+OUT = ROOT / "topic01_tensors" / "outputs"
+OUT.mkdir(exist_ok=True)
+
 import matplotlib
 
 if __name__ == "__main__":
@@ -58,8 +66,8 @@ for th in (0, 30, 45):
     print(f"   theta = {th:>2}°  J = {np.round(J, 4)}  ângulo(E -> J) = {ang:+.2f}°")
 
 # %% 7) Visualização
-fig1 = plot_vectors_and_ellipse(SX, SY, (0, 30, 45), savepath="outputs/J_vs_E.png")
-fig2 = plot_deviation(SX, SY, (0, 30, 45), savepath="outputs/desvio_E_J.png")
-print("\n7) Figuras salvas em outputs/")
+fig1 = plot_vectors_and_ellipse(SX, SY, (0, 30, 45), savepath=OUT / "J_vs_E.png")
+fig2 = plot_deviation(SX, SY, (0, 30, 45), savepath=OUT / "desvio_E_J.png")
+print("\n7) Figuras salvas em topic01_tensors/outputs/")
 if __name__ != "__main__":
     plt.show()

@@ -90,14 +90,21 @@ sp.pprint(sol2)
 
 # %% [markdown]
 # ## 1.6 Euler-Lagrange e a primeira variação
-# Troque y por y + εη, com η(x0) = η(x1) = 0 (as pontas ficam fixas). A variação da ação é
+# Compare a curva y com uma curva vizinha y + εη, onde η(x0) = η(x1) = 0 (as pontas ficam fixas).
+# Para cada η escolhido, S[y + εη] é uma função comum do número ε. A **primeira variação** é a
+# derivada dessa função em ε = 0:
 #
-# δS = ∫ (∂L/∂y · η + ∂L/∂y' · η') dx.
+# $$\delta S=\frac{d}{d\varepsilon}S[y+\varepsilon\eta]\Big|_{\varepsilon=0}
+# =\int_{x_0}^{x_1}\left(\frac{\partial L}{\partial y}\,\eta+\frac{\partial L}{\partial y'}\,\eta'\right)dx$$
 #
-# Integrando por partes o segundo termo, o termo de borda some (η = 0 nas pontas) e sobra
+# Integrando por partes o segundo termo:
 #
-# δS = ∫ (∂L/∂y − d/dx ∂L/∂y') η dx.
+# $$\delta S=\left[\frac{\partial L}{\partial y'}\,\eta\right]_{x_0}^{x_1}
+# +\int_{x_0}^{x_1}\left(\frac{\partial L}{\partial y}-\frac{d}{dx}\frac{\partial L}{\partial y'}\right)\eta\,dx$$
 #
-# Para y ser estacionária, δS = 0 vale para **qualquer** η. Pelo lema fundamental do cálculo
-# variacional, isso só é possível se o parêntese for zero em todo ponto. Esse parêntese zerado
-# é exatamente a equação de Euler-Lagrange. Ou seja: **EL = condição de primeira variação nula.**
+# O primeiro termo (o de borda) é zero porque η se anula nas duas pontas. Para y ser estacionária,
+# δS = 0 tem de valer para **qualquer** η. Pelo lema fundamental do cálculo variacional, isso só é
+# possível se o parêntese for zero em todo ponto do intervalo. Com o sinal trocado, esse parêntese
+# é a expressão do item 1.3, então d/dx(∂L/∂y') − ∂L/∂y = 0.
+# Ou seja: **a equação de Euler-Lagrange é a condição de primeira variação nula.** Ela garante que
+# S é estacionária, não que seja mínima.
